@@ -1,0 +1,9 @@
+services:
+  windows-builder:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: packaging/windows/Dockerfile
+    volumes:
+      - .:/workspace
+
