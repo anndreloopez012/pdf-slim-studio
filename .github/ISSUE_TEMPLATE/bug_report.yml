@@ -1,0 +1,51 @@
+name: Reportar un problema
+description: Informa un comportamiento incorrecto y reproducible.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "No adjuntes documentos privados. Utiliza un PDF sintético o anonimizado."
+  - type: input
+    id: version
+    attributes:
+      label: Versión
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: system
+    attributes:
+      label: Sistema operativo
+      options:
+        - Windows 11
+        - Windows 10
+        - macOS Apple Silicon
+        - Linux desde código fuente
+        - Otro
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Descripción
+      description: Explica qué ocurrió y qué esperabas.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducir
+      placeholder: "1. Abrir...\n2. Seleccionar...\n3. Pulsar..."
+    validations:
+      required: true
+  - type: textarea
+    id: pdf
+    attributes:
+      label: Características del PDF
+      description: Número de páginas, si es escaneado, formularios, anotaciones o firmas. No incluyas datos privados.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Mensaje de error o informe
+      render: shell
