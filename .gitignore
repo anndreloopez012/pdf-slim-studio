@@ -1,0 +1,16 @@
+.venv/
+.venv-*/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+coverage.xml
+*.validation.json
+build/
+dist/
+.DS_Store
+.idea/
+.vscode/
+*.spec
+*.egg-info/
+graphify-out/
