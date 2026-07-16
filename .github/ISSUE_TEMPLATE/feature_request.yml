@@ -1,0 +1,31 @@
+name: Proponer una mejora
+description: Sugiere una función, validación o método de optimización.
+title: "[Mejora]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Necesidad
+      description: ¿Qué problema resolvería esta mejora?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Propuesta
+      description: Describe el comportamiento esperado.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validación sugerida
+      description: Explica cómo comprobarías que no altera el documento.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacidad
+      options:
+        - label: Confirmo que no adjuntaré documentos ni datos privados.
+          required: true
