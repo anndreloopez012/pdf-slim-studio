@@ -1,0 +1,19 @@
+PDF SLIM STUDIO - INSTALACIÓN EN MAC
+====================================
+
+1. Arrastra "PDF Slim Studio" sobre la carpeta "Applications".
+2. Abre Aplicaciones y busca "PDF Slim Studio".
+3. En el primer inicio, haz clic derecho sobre la aplicación y selecciona "Abrir".
+4. Si macOS muestra una advertencia, vuelve a pulsar "Abrir".
+
+Si no aparece el botón Abrir:
+
+1. Entra en Ajustes del Sistema > Privacidad y seguridad.
+2. Busca el aviso sobre PDF Slim Studio.
+3. Pulsa "Abrir igualmente".
+
+Esto solo se realiza una vez. La aplicación procesa los documentos localmente y
+no envía los PDF a Internet.
+
+Compatibilidad: Macs con Apple Silicon (M1, M2, M3, M4 o posteriores) y macOS 13+
+
