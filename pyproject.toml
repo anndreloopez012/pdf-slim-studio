@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pdf-slim-studio"
+version = "1.0.0"
+description = "Optimizador local de PDF con validación estructural y visual."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Andre Lopez" }]
+dependencies = [
+  "pypdf>=6.0,<7",
+  "Pillow>=11,<13",
+  "numpy>=1.26,<2",
+  "PyMuPDF>=1.25,<2",
+  "PySide6-Essentials>=6.8,<6.9",
+]
+
+[project.scripts]
+pdf-slim = "cli:main"
+
+[tool.setuptools]
+py-modules = ["cli"]
+
+[tool.setuptools.packages.find]
+include = ["pdfslim*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
