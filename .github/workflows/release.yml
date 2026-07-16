@@ -1,0 +1,109 @@
+name: Publish installers
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          architecture: x64
+          cache: pip
+
+      - name: Install Inno Setup
+        shell: powershell
+        run: choco install innosetup --yes --no-progress
+
+      - name: Build and test
+        shell: powershell
+        run: ./packaging/windows/build_windows.ps1
+
+      - name: Upload installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: |
+            dist/windows/PDF-Slim-Studio-Setup-*.exe
+            dist/windows/PDF-Slim-Studio-Portable-*.zip
+            dist/windows/SHA256SUMS.txt
+          if-no-files-found: error
+
+  macos:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/python -m pip install -r requirements.txt
+
+      - name: Build and test
+        run: ./packaging/build_macos.sh
+
+      - name: Upload installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: |
+            dist/macos/PDF-Slim-Studio-*.dmg
+            dist/macos/PDF-Slim-Studio-*.zip
+            dist/macos/SHA256SUMS.txt
+          if-no-files-found: error
+
+  release:
+    needs: [windows, macos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download installers
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sha256sum \
+            release-assets/windows/PDF-Slim-Studio-Setup-*.exe \
+            release-assets/windows/PDF-Slim-Studio-Portable-*.zip \
+            release-assets/macos/PDF-Slim-Studio-*.dmg \
+            release-assets/macos/PDF-Slim-Studio-*.zip \
+            > release-assets/SHA256SUMS.txt
+          assets=(
+            release-assets/windows/PDF-Slim-Studio-Setup-*.exe
+            release-assets/windows/PDF-Slim-Studio-Portable-*.zip
+            release-assets/macos/PDF-Slim-Studio-*.dmg
+            release-assets/macos/PDF-Slim-Studio-*.zip
+            release-assets/SHA256SUMS.txt
+          )
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "${assets[@]}" --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$GITHUB_REF_NAME" "${assets[@]}" \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "PDF Slim Studio ${GITHUB_REF_NAME#v}" \
+              --generate-notes
+          fi

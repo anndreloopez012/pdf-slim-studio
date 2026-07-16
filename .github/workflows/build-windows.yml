@@ -1,0 +1,39 @@
+name: Build Windows installer
+
+on:
+  workflow_dispatch:
+
+jobs:
+  windows-installer:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          architecture: "x64"
+          cache: "pip"
+
+      - name: Install Inno Setup
+        shell: powershell
+        run: choco install innosetup --yes --no-progress
+
+      - name: Build and test installer
+        shell: powershell
+        run: ./packaging/windows/build_windows.ps1
+
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: PDF-Slim-Studio-Windows-x64
+          path: |
+            dist/windows/PDF-Slim-Studio-Setup-*.exe
+            dist/windows/PDF-Slim-Studio-Portable-*.zip
+            dist/windows/SHA256SUMS.txt
+          if-no-files-found: error
