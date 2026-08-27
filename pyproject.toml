@@ -15,7 +15,7 @@ dependencies = [
   "Pillow>=11,<13",
   "numpy>=1.26,<2",
   "PyMuPDF>=1.25,<2",
-  "PySide6-Essentials>=6.8,<6.9",
+  "PySide6-Essentials>=6.8,<6.12",
 ]
 
 [project.scripts]
